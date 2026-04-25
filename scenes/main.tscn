@@ -1,0 +1,324 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1_bootstrap"]
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/follow_camera.gd" id="3_camera"]
+[ext_resource type="Texture2D" path="res://art/Environment/ChatGPT Image 24 de abr. de 2026, 17_31_39.png" id="4_background"]
+[ext_resource type="Resource" path="res://resources/music/dungeon_rattle_gear.tres" id="5_music"]
+[ext_resource type="Texture2D" path="res://art/Environment/ChatGPT Image 24 de abr. de 2026, 17_31_48.png" id="6_env_tiles"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(92, 190)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(4200, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_archive_platform"]
+size = Vector2(250, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lobby_platform"]
+size = Vector2(220, 20)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_bootstrap")
+background_music = ExtResource("5_music")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="SegmentOffice" type="Node2D" parent="World"]
+
+[node name="BackgroundOffice" type="Sprite2D" parent="World/SegmentOffice"]
+z_index = -10
+texture_filter = 1
+scale = Vector2(0.77, 0.77)
+texture = ExtResource("4_background")
+centered = false
+
+[node name="SegmentArchive" type="Node2D" parent="World"]
+position = Vector2(1287, 0)
+
+[node name="Wall" type="Polygon2D" parent="World/SegmentArchive"]
+z_index = -10
+color = Color(0.403922, 0.34902, 0.313726, 1)
+polygon = PackedVector2Array(0, 0, 1287, 0, 1287, 594, 0, 594)
+
+[node name="CeilingBand" type="Polygon2D" parent="World/SegmentArchive"]
+z_index = -9
+color = Color(0.113725, 0.0941176, 0.0862745, 1)
+polygon = PackedVector2Array(0, 0, 1287, 0, 1287, 72, 0, 72)
+
+[node name="BeamA" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -8
+texture_filter = 1
+position = Vector2(36, 24)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(311, 966, 404, 52)
+
+[node name="BeamB" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -8
+texture_filter = 1
+position = Vector2(441, 24)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(934, 966, 392, 54)
+
+[node name="BeamC" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -8
+texture_filter = 1
+position = Vector2(855, 24)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(56, 966, 249, 52)
+
+[node name="WindowWide" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -7
+texture_filter = 1
+position = Vector2(82, 104)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(111, 61, 270, 282)
+
+[node name="WindowMedium" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -7
+texture_filter = 1
+position = Vector2(422, 112)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(522, 60, 191, 250)
+
+[node name="WindowTall" type="Sprite2D" parent="World/SegmentArchive"]
+z_index = -7
+texture_filter = 1
+position = Vector2(650, 112)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(724, 60, 157, 250)
+
+[node name="ShelfA" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(128, 262)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(45, 367, 258, 72)
+
+[node name="ShelfB" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(492, 252)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(529, 367, 228, 72)
+
+[node name="DeskLeft" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(102, 428)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(52, 486, 260, 146)
+
+[node name="DeskRight" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(580, 422)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(769, 486, 203, 147)
+
+[node name="PlatformShelfVisual" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(850, 378)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(975, 367, 205, 72)
+
+[node name="WallPanel" type="Sprite2D" parent="World/SegmentArchive"]
+texture_filter = 1
+position = Vector2(898, 96)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(886, 62, 279, 272)
+
+[node name="SegmentLobby" type="Node2D" parent="World"]
+position = Vector2(2574, 0)
+
+[node name="Wall" type="Polygon2D" parent="World/SegmentLobby"]
+z_index = -10
+color = Color(0.32549, 0.313726, 0.329412, 1)
+polygon = PackedVector2Array(0, 0, 1287, 0, 1287, 594, 0, 594)
+
+[node name="CeilingBand" type="Polygon2D" parent="World/SegmentLobby"]
+z_index = -9
+color = Color(0.0941176, 0.0941176, 0.117647, 1)
+polygon = PackedVector2Array(0, 0, 1287, 0, 1287, 72, 0, 72)
+
+[node name="BeamA" type="Sprite2D" parent="World/SegmentLobby"]
+z_index = -8
+texture_filter = 1
+position = Vector2(60, 26)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(56, 966, 249, 52)
+
+[node name="BeamB" type="Sprite2D" parent="World/SegmentLobby"]
+z_index = -8
+texture_filter = 1
+position = Vector2(352, 24)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(311, 966, 404, 52)
+
+[node name="BeamC" type="Sprite2D" parent="World/SegmentLobby"]
+z_index = -8
+texture_filter = 1
+position = Vector2(811, 24)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(934, 966, 392, 54)
+
+[node name="WindowWide" type="Sprite2D" parent="World/SegmentLobby"]
+z_index = -7
+texture_filter = 1
+position = Vector2(66, 102)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(111, 61, 270, 282)
+
+[node name="WindowNarrow" type="Sprite2D" parent="World/SegmentLobby"]
+z_index = -7
+texture_filter = 1
+position = Vector2(376, 102)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(392, 61, 115, 282)
+
+[node name="WallPanel" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(548, 96)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(886, 62, 279, 272)
+
+[node name="CrackedWall" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(933, 54)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(1209, 31, 182, 307)
+
+[node name="DeskLeft" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(138, 428)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(318, 486, 187, 146)
+
+[node name="DeskCenter" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(410, 428)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(769, 486, 203, 147)
+
+[node name="ShelfA" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(126, 260)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(328, 367, 174, 72)
+
+[node name="ShelfB" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(432, 260)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(785, 367, 146, 72)
+
+[node name="PlatformShelfVisual" type="Sprite2D" parent="World/SegmentLobby"]
+texture_filter = 1
+position = Vector2(868, 358)
+texture = ExtResource("6_env_tiles")
+centered = false
+region_enabled = true
+region_rect = Rect2(975, 367, 205, 72)
+
+[node name="ExitDoor" type="Polygon2D" parent="World/SegmentLobby"]
+color = Color(0.105882, 0.113725, 0.145098, 1)
+polygon = PackedVector2Array(1065, 318, 1180, 318, 1180, 596, 1065, 596)
+
+[node name="ExitLight" type="Polygon2D" parent="World/SegmentLobby"]
+color = Color(0.301961, 0.858824, 0.788235, 0.8)
+polygon = PackedVector2Array(1080, 336, 1165, 336, 1165, 352, 1080, 352)
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(2100, 634)
+
+[node name="GroundVisual" type="Polygon2D" parent="Ground"]
+color = Color(0.168627, 0.137255, 0.105882, 1)
+polygon = PackedVector2Array(-2100, -40, 2100, -40, 2100, 40, -2100, 40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="ArchivePlatform" type="StaticBody2D" parent="."]
+position = Vector2(2245, 432)
+
+[node name="Visual" type="Polygon2D" parent="ArchivePlatform"]
+color = Color(0.305882, 0.211765, 0.145098, 1)
+polygon = PackedVector2Array(-125, -10, 125, -10, 125, 10, -125, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArchivePlatform"]
+shape = SubResource("RectangleShape2D_archive_platform")
+
+[node name="LobbyPlatform" type="StaticBody2D" parent="."]
+position = Vector2(3510, 412)
+
+[node name="Visual" type="Polygon2D" parent="LobbyPlatform"]
+color = Color(0.305882, 0.211765, 0.145098, 1)
+polygon = PackedVector2Array(-110, -10, 110, -10, 110, 10, -110, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LobbyPlatform"]
+shape = SubResource("RectangleShape2D_lobby_platform")
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(360, 555)
+script = ExtResource("2_player")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Hero"]
+texture_filter = 1
+scale = Vector2(1.5, 1.5)
+position = Vector2(0, -175)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hero"]
+position = Vector2(0, -95)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+limit_left = 0
+limit_top = 0
+limit_right = 3860
+limit_bottom = 724
+script = ExtResource("3_camera")
+target_path = NodePath("../Hero")

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bnsj3aay7od6n"
+path="res://.godot/imported/Lag Synthoplasm10.wav-62c1ff7e2306fa56b0d3453fc14c619b.sample"
+
+[deps]
+
+source_file="res://audio/music/Lag Synthoplasm10.wav"
+dest_files=["res://.godot/imported/Lag Synthoplasm10.wav-62c1ff7e2306fa56b0d3453fc14c619b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

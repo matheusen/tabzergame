@@ -1,25 +1,13 @@
-# Unity
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
-[Mm]emoryCaptures/
+# Godot
+.godot/
+export.cfg
+export_presets.cfg
 
 # IDE
 .vs/
 .vscode/
 .idea/
-*.csproj
-*.sln
-*.user
-*.pidb
-*.booproj
-*.svd
 
 # OS
 .DS_Store
 Thumbs.db
-

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MusicTrack" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/music_track.gd" id="1_track_script"]
+[ext_resource type="AudioStream" path="res://audio/music/Dungeon Rattle-gear.wav" id="2_stream"]
+
+[resource]
+script = ExtResource("1_track_script")
+track_name = &"dungeon_rattle_gear"
+stream = ExtResource("2_stream")
+volume_db = -10.0
+loop = true
