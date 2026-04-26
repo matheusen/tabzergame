@@ -8,19 +8,38 @@ extends CharacterBody2D
 @export var crouch_collision_size := Vector2(92.0, 112.0)
 @export var normal_collision_position := Vector2(0.0, -95.0)
 @export var crouch_collision_position := Vector2(0.0, -56.0)
+@export var max_health: int = 100
+@export var light_attack_damage: int = 20
+@export var heavy_attack_damage: int = 35
+@export var light_attack_active_time: float = 0.16
+@export var heavy_attack_active_time: float = 0.24
+@export var hitstun_duration: float = 0.18
+@export var damage_flash_duration: float = 0.08
+@export var knockback_decay: float = 2400.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var attack_hitbox: Area2D = get_node_or_null("AttackHitbox") as Area2D
 
 var jump_requested := false
 var requested_attack: StringName = &""
 var is_crouching := false
 var rectangle_shape: RectangleShape2D
+var health: int
+var attack_damage := 0
+var attack_targets_hit: Array[Node] = []
+var hitstun_timer := 0.0
 
 
 func _ready() -> void:
+	add_to_group("player")
+	health = max_health
 	rectangle_shape = collision_shape.shape.duplicate() as RectangleShape2D
 	collision_shape.shape = rectangle_shape
+	if attack_hitbox != null:
+		attack_hitbox.monitoring = false
+		attack_hitbox.area_entered.connect(_on_attack_hitbox_area_entered)
+		attack_hitbox.body_entered.connect(_on_attack_hitbox_body_entered)
 	_apply_crouch(false)
 	sprite.sprite_frames = _create_sprite_frames()
 	sprite.play("idle")
@@ -37,16 +56,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	hitstun_timer = max(hitstun_timer - delta, 0.0)
 	var direction := _read_direction()
 	var gravity := float(ProjectSettings.get_setting("physics/2d/default_gravity"))
 	var wants_crouch := _read_crouch() and is_on_floor()
 
 	_apply_crouch(wants_crouch)
-	velocity.x = direction * (crouch_speed if is_crouching else run_speed)
+	if hitstun_timer <= 0.0:
+		velocity.x = direction * (crouch_speed if is_crouching else run_speed)
+	else:
+		velocity.x = move_toward(velocity.x, 0.0, knockback_decay * delta)
 
 	if not is_on_floor():
 		velocity.y += gravity * gravity_multiplier * delta
-	elif jump_requested and not is_crouching:
+	elif jump_requested and not is_crouching and hitstun_timer <= 0.0:
 		velocity.y = jump_velocity
 
 	jump_requested = false
@@ -54,6 +77,7 @@ func _physics_process(delta: float) -> void:
 
 	if direction != 0.0:
 		sprite.flip_h = direction < 0.0
+		_update_attack_hitbox_direction()
 
 	_update_animation(direction)
 
@@ -87,8 +111,9 @@ func _apply_crouch(enabled: bool) -> void:
 
 
 func _update_animation(direction: float) -> void:
-	if requested_attack != &"" and not is_crouching:
+	if requested_attack != &"" and not is_crouching and hitstun_timer <= 0.0:
 		sprite.play(requested_attack)
+		_start_attack(requested_attack)
 		requested_attack = &""
 		return
 
@@ -133,3 +158,68 @@ func _add_animation(frames: SpriteFrames, animation_name: StringName, speed: flo
 	for index in count:
 		var path := "res://art/Player/Generated/%s_%02d.png" % [animation_name, index]
 		frames.add_frame(animation_name, load(path))
+
+
+func take_damage(amount: int) -> void:
+	health = max(health - amount, 0)
+	hitstun_timer = hitstun_duration
+	modulate = Color(1.0, 0.55, 0.55, 1.0)
+	await get_tree().create_timer(damage_flash_duration).timeout
+	modulate = Color.WHITE
+
+
+func apply_melee_hit(amount: int, attacker_x: float, horizontal_force: float = 380.0, vertical_force: float = -90.0) -> void:
+	take_damage(amount)
+	var push_direction := 1.0 if global_position.x >= attacker_x else -1.0
+	velocity.x = push_direction * horizontal_force
+	if is_on_floor():
+		velocity.y = vertical_force
+
+
+func can_be_hit_by_bullet(bullet_position: Vector2) -> bool:
+	if not is_crouching:
+		return true
+
+	return bullet_position.y >= global_position.y - 96.0
+
+
+func _start_attack(animation_name: StringName) -> void:
+	if attack_hitbox == null:
+		return
+
+	attack_damage = heavy_attack_damage if animation_name == &"attack_heavy" else light_attack_damage
+	attack_targets_hit.clear()
+	_update_attack_hitbox_direction()
+	attack_hitbox.monitoring = true
+
+	var active_time := heavy_attack_active_time if animation_name == &"attack_heavy" else light_attack_active_time
+	await get_tree().create_timer(active_time).timeout
+	if attack_hitbox != null:
+		attack_hitbox.monitoring = false
+
+
+func _update_attack_hitbox_direction() -> void:
+	if attack_hitbox == null:
+		return
+
+	attack_hitbox.position.x = -76.0 if sprite.flip_h else 76.0
+
+
+func _on_attack_hitbox_area_entered(area: Area2D) -> void:
+	_try_damage_target(area)
+
+
+func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+	_try_damage_target(body)
+
+
+func _try_damage_target(target: Node) -> void:
+	var damage_target := target
+	if not damage_target.has_method("take_damage") and target.get_parent() != null:
+		damage_target = target.get_parent()
+
+	if damage_target in attack_targets_hit or not damage_target.has_method("take_damage"):
+		return
+
+	attack_targets_hit.append(damage_target)
+	damage_target.take_damage(attack_damage)
