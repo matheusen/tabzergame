@@ -260,8 +260,8 @@ crouch_collision_position = Vector2(0, -52)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Hero"]
 texture_filter = 1
-scale = Vector2(0.92, 0.92)
-position = Vector2(0, -87)
+scale = Vector2(1, 1)
+position = Vector2(0, -113)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hero"]
 position = Vector2(0, -87)
@@ -282,8 +282,8 @@ target_path = NodePath("../Hero")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Agent3"]
 texture_filter = 1
-scale = Vector2(0.54, 0.54)
-position = Vector2(0, -76)
+scale = Vector2(1.15, 1.15)
+position = Vector2(0, -84)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Agent3"]
 position = Vector2(0, -82)
@@ -302,6 +302,80 @@ collision_layer = 0
 collision_mask = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Agent3/MeleeHitbox"]
+position = Vector2(0, -78)
+shape = SubResource("RectangleShape2D_agent_melee")
+
+[node name="ExecutorAgent" type="CharacterBody2D" parent="."]
+position = Vector2(1560, 515)
+script = ExtResource("6_enemy_agent")
+target_path = NodePath("../Hero")
+agent_kind = 1
+can_shoot = false
+max_health = 120
+melee_damage = 13
+kick_damage = 17
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExecutorAgent"]
+texture_filter = 1
+scale = Vector2(1.1, 1.1)
+position = Vector2(0, -84)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExecutorAgent"]
+position = Vector2(0, -82)
+shape = SubResource("RectangleShape2D_agent")
+
+[node name="Hurtbox" type="Area2D" parent="ExecutorAgent"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExecutorAgent/Hurtbox"]
+position = Vector2(0, -88)
+shape = SubResource("RectangleShape2D_agent_hurtbox")
+
+[node name="MeleeHitbox" type="Area2D" parent="ExecutorAgent"]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExecutorAgent/MeleeHitbox"]
+position = Vector2(0, -78)
+shape = SubResource("RectangleShape2D_agent_melee")
+
+[node name="GlitchAgent" type="CharacterBody2D" parent="."]
+position = Vector2(2260, 515)
+script = ExtResource("6_enemy_agent")
+target_path = NodePath("../Hero")
+agent_kind = 2
+max_health = 80
+run_speed = 280.0
+shoot_min_range = 420.0
+shoot_ideal_range = 680.0
+shoot_max_range = 900.0
+bullet_damage = 11
+muzzle_offset = Vector2(72, -91)
+bullet_color = Color(0.0784314, 0.541176, 1, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="GlitchAgent"]
+texture_filter = 1
+scale = Vector2(1.05, 1.05)
+position = Vector2(0, -88)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GlitchAgent"]
+position = Vector2(0, -82)
+shape = SubResource("RectangleShape2D_agent")
+
+[node name="Hurtbox" type="Area2D" parent="GlitchAgent"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GlitchAgent/Hurtbox"]
+position = Vector2(0, -88)
+shape = SubResource("RectangleShape2D_agent_hurtbox")
+
+[node name="MeleeHitbox" type="Area2D" parent="GlitchAgent"]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GlitchAgent/MeleeHitbox"]
 position = Vector2(0, -78)
 shape = SubResource("RectangleShape2D_agent_melee")
 

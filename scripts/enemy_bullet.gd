@@ -40,6 +40,11 @@ func _hit(target: Node) -> void:
 	if damage_target.is_in_group("player") and damage_target.has_method("can_be_hit_by_bullet") and not damage_target.can_be_hit_by_bullet(global_position):
 		return
 
+	if damage_target.has_method("apply_projectile_hit") and damage_target.is_in_group("player"):
+		damage_target.apply_projectile_hit(damage, global_position)
+		queue_free()
+		return
+
 	if damage_target.has_method("take_damage") and damage_target.is_in_group("player"):
 		damage_target.take_damage(damage)
 		queue_free()
