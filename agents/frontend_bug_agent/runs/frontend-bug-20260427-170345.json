@@ -1,0 +1,29 @@
+{
+  "createdAt": "2026-04-27T17:03:45.271661Z",
+  "frontendDir": "C:\\Users\\Matheus\\Documents\\github\\tabzer\\frontend",
+  "tsc": {
+    "returncode": -1,
+    "errors": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "raw": "[WinError 2] The system cannot find the file specified"
+  },
+  "eslint": {
+    "returncode": -1,
+    "issues": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  "browser": [
+    {
+      "error": "playwright not installed — run: pip install playwright && playwright install chromium"
+    }
+  ],
+  "summary": {
+    "totalErrors": 0,
+    "tscErrors": 0,
+    "eslintErrors": 0,
+    "browserErrors": 0,
+    "verdict": "PASS"
+  }
+}

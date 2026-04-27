@@ -39,6 +39,7 @@ var hitstun_timer := 0.0
 var parry_timer := 0.0
 var guard_impact_timer := 0.0
 var guard_recover_timer := 0.0
+var has_wall_guitar := false
 
 
 func _ready() -> void:
@@ -117,6 +118,13 @@ func _read_guard() -> bool:
 	return Input.is_key_pressed(KEY_Q) or Input.is_key_pressed(KEY_L) or Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 
 
+func equip_wall_guitar() -> void:
+	has_wall_guitar = true
+	light_attack_damage = maxi(light_attack_damage, 24)
+	heavy_attack_damage = maxi(heavy_attack_damage, 42)
+	guard_damage_taken_ratio = minf(guard_damage_taken_ratio, 0.08)
+
+
 func _update_guard(wants_guard: bool, _delta: float) -> void:
 	var can_guard := wants_guard and not _is_attack_locked()
 	is_guarding = can_guard
@@ -181,7 +189,7 @@ func _update_animation(direction: float) -> void:
 		if sprite.animation == "crouch_down" and sprite.is_playing():
 			return
 
-		_play_if_needed("crouch")
+		_play_if_needed("crouch_move" if direction != 0.0 else "crouch")
 	elif not is_on_floor():
 		_play_if_needed("jump")
 	elif direction != 0.0:
@@ -220,6 +228,7 @@ func _create_sprite_frames() -> SpriteFrames:
 	_add_animation(frames, "jump", 8.0, false, 3)
 	_add_animation(frames, "crouch_down", 10.0, false, 4)
 	_add_animation(frames, "crouch", 1.0, true, 1)
+	_add_animation(frames, "crouch_move", 10.0, true, 6)
 	_add_animation(frames, "attack_light", 12.0, false, 5)
 	_add_animation(frames, "attack_heavy", 10.0, false, 6)
 	_add_defense_animation(frames, &"guard_raise", 10.0, false, [&"guard_ready_00", &"guard_raise_00", &"guard_hold_00"])

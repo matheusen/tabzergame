@@ -4,6 +4,7 @@ const OUT_DIR := "res://art/Player/Generated"
 const MOVEMENT_SHEET := "res://art/Player/ChatGPT Image 24 de abr. de 2026, 17_32_38.png"
 const ACTION_SHEET := "res://art/Player/ChatGPT Image 24 de abr. de 2026, 17_32_30.png"
 const CROUCH_SHEET := "res://art/Player/player_abaixando.png"
+const CROUCH_MOVE_SHEET := "res://art/Player/player_abaixado_andando.png"
 const ATTACK_SHEET := "res://art/Player/assets_attack.png"
 const FRAME_SIZE := Vector2i(320, 260)
 const ATTACK_FRAME_SIZE := FRAME_SIZE
@@ -56,6 +57,18 @@ const ANIMS := {
 		"fixed_scale": 0.46,
 		"rects": [
 			Rect2i(1100, 350, 330, 385),
+		],
+	},
+	"crouch_move": {
+		"source": CROUCH_MOVE_SHEET,
+		"fixed_scale": 0.72,
+		"rects": [
+			Rect2i(64, 338, 220, 176),
+			Rect2i(304, 340, 210, 174),
+			Rect2i(530, 347, 190, 166),
+			Rect2i(765, 344, 210, 170),
+			Rect2i(1018, 346, 210, 166),
+			Rect2i(1250, 346, 190, 168),
 		],
 	},
 	"attack_light": {

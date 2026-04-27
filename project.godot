@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Tabzer Game"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/scene_1_office.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [audio]

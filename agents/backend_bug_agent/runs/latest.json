@@ -1,0 +1,38 @@
+{
+  "createdAt": "2026-04-19T21:44:00.656888Z",
+  "backendDir": "C:\\Users\\mengl\\Documents\\Github\\tabzer\\backend",
+  "lint": {
+    "returncode": 2,
+    "issues": [],
+    "errorCount": 0,
+    "warningCount": 0,
+    "raw": ""
+  },
+  "health": {
+    "up": false,
+    "endpoint": "http://localhost:8000",
+    "status": null
+  },
+  "imports": [
+    {
+      "module": "fastapi",
+      "ok": true
+    },
+    {
+      "module": "uvicorn",
+      "ok": true
+    },
+    {
+      "module": "pydantic",
+      "ok": true
+    }
+  ],
+  "summary": {
+    "totalErrors": 0,
+    "lintErrors": 0,
+    "lintWarnings": 0,
+    "apiUp": false,
+    "importFailures": 0,
+    "verdict": "PASS"
+  }
+}

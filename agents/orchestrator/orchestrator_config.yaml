@@ -1,0 +1,56 @@
+project:
+  name: tabzergame
+  root: .
+  default_autonomy_level: 3
+
+paths:
+  runs_dir: .agent-runs
+  worktrees_dir: .agent-worktrees
+  artifacts_dir: .agent-artifacts
+
+policies:
+  max_attempts: 3
+  require_human_approval_for:
+    - commit
+    - pull_request
+    - lockfile_change
+    - package_install
+    - migration
+    - delete_file
+    - auth_change
+    - infra_change
+
+validation:
+  frontend:
+    enabled: false
+    cwd_relative: frontend
+    commands:
+      - ["npm", "run", "typecheck"]
+      - ["npm", "run", "lint"]
+  backend:
+    enabled: false
+    cwd_relative: backend
+    commands:
+      - ["python", "-m", "ruff", "check", "."]
+
+game:
+  enabled: true
+  cwd_relative: .
+  # Optional: set GODOT_BIN env var or put godot/godot4 on PATH for headless validation.
+  commands: []
+
+tabzer:
+  enabled: false   # Set true to enable browser-based validation (requires running app)
+  target_url: "http://localhost:3000/play?debugCursor=1"
+  cwd_relative: .
+  commands:
+    - ["python", "backend/agents/tab_debug_agent/run_agent.py", "--codex-stdout-only"]
+
+llm:
+  # provider: auto | anthropic | claude-code | openai | copilot | codex | none
+  # auto = detect best available in priority: anthropic > claude-code > openai > copilot > codex
+  provider: auto
+  # model: optional override (e.g. "claude-sonnet-4-6", "gpt-4o", "sonnet", "opus")
+  # Leave empty to use provider defaults
+  model:
+  model_fast:

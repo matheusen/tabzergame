@@ -3,6 +3,13 @@
 export.cfg
 export_presets.cfg
 
+# Agent runtime artifacts
+.agent-runs/
+.agent-worktrees/
+.agent-artifacts/
+__pycache__/
+*.pyc
+
 # IDE
 .vs/
 .vscode/

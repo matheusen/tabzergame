@@ -646,12 +646,22 @@ func _create_bullet() -> Area2D:
 
 func _die() -> void:
 	velocity = Vector2.ZERO
-	collision_shape.disabled = true
+	remove_from_group("enemy")
+	collision_layer = 0
+	collision_mask = 0
+	collision_shape.set_deferred("disabled", true)
 	hurtbox.monitoring = false
+	hurtbox.monitorable = false
+	hurtbox.collision_layer = 0
+	hurtbox.collision_mask = 0
 	melee_hitbox.monitoring = false
+	melee_hitbox.monitorable = false
+	melee_hitbox.collision_layer = 0
+	melee_hitbox.collision_mask = 0
 	_play_if_needed(&"knockdown")
-	await get_tree().create_timer(1.6).timeout
-	queue_free()
+	await sprite.animation_finished
+	if state == State.DOWN:
+		_play_if_needed(&"dead")
 
 
 func _apply_gravity(delta: float) -> void:
@@ -786,6 +796,7 @@ func _create_sprite_frames() -> SpriteFrames:
 	_add_animation(frames, texture, &"crouch_shoot", 12.0, false, frame_set["crouch_shoot"])
 	_add_animation(frames, texture, &"hurt", 8.0, false, frame_set["hurt"])
 	_add_animation(frames, texture, &"knockdown", 4.0, false, frame_set["knockdown"])
+	_add_file_animation(frames, &"dead", _dead_body_path())
 	_add_animation(frames, texture, &"getup", 4.0, false, frame_set["getup"])
 	return frames
 
@@ -800,6 +811,16 @@ func _default_sprite_sheet_path() -> String:
 			return "res://art/Enemies/agent3_clean.png"
 
 
+func _dead_body_path() -> String:
+	match agent_kind:
+		AgentKind.EXECUTOR:
+			return "res://art/Enemies/Corpses/agent4_dead.png"
+		AgentKind.GLITCH:
+			return "res://art/Enemies/Corpses/agent6_dead.png"
+		_:
+			return "res://art/Enemies/Corpses/agent3_dead.png"
+
+
 func _get_frame_set() -> Dictionary:
 	match agent_kind:
 		AgentKind.EXECUTOR:
@@ -808,6 +829,13 @@ func _get_frame_set() -> Dictionary:
 			return GLITCH_FRAMES
 		_:
 			return AGENT_FRAMES
+
+
+func _add_file_animation(frames: SpriteFrames, animation_name: StringName, path: String) -> void:
+	frames.add_animation(animation_name)
+	frames.set_animation_speed(animation_name, 1.0)
+	frames.set_animation_loop(animation_name, true)
+	frames.add_frame(animation_name, load(path))
 
 
 func _add_animation(frames: SpriteFrames, texture: Texture2D, animation_name: StringName, speed: float, loops: bool, regions: Array) -> void:
